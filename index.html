@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACStudio - Barbería Premium</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-main">
+            <a href="#" class="logo">ACStudio</a>
+            <ul>
+                <li><a href="#services">Servicios</a></li>
+                <li><a href="#team">Barberos</a></li>
+                <li><a href="#reviews">Reseñas</a></li>
+                <li><a href="#booking">Reservar</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Estilo y Precisión en Cada Corte</h1>
+                <p>La experiencia de barbería que redefine tu estilo.</p>
+                <a href="#booking" class="btn-primary">Reserva tu Cita</a>
+            </div>
+        </section>
+
+        <section id="services" class="container">
+            <h2>Nuestros Servicios</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Corte+Caballero" alt="Corte de Caballero">
+                    <h3>Corte Caballero</h3>
+                    <p>Estilo y precisión para un look impecable.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Corte+%2B+Barba" alt="Corte de Caballero + Barba">
+                    <h3>Corte Caballero + Barba</h3>
+                    <p>El pack completo para un estilo definido y cuidado.</p>
+                </div>
+                <div class="service-card">
+                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Recorte+de+Barba" alt="Recorte de Barba">
+                    <h3>Recorte de Barba</h3>
+                    <p>Define y perfila tu barba con maestría.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="container">
+            <h2>Nuestro Equipo</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/250x250/1a1a1a/c9a957?text=Alex" alt="Barbero Alex">
+                    <h4>Alex "El Maestro"</h4>
+                    <p>Especialista en cortes clásicos y diseños modernos.</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/250x250/1a1a1a/c9a957?text=Carlos" alt="Barbero Carlos">
+                    <h4>Carlos "El Detallista"</h4>
+                    <p>El rey de las barbas y los afeitados perfectos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" class="container">
+            <h2>Lo que dicen nuestros clientes</h2>
+            <div id="reviews-container" class="reviews-grid">
+                <!-- Las reseñas se cargarán aquí -->
+            </div>
+            <form id="review-form">
+                <h3>Deja tu reseña</h3>
+                <input type="text" id="name" placeholder="Tu nombre" required>
+                <select id="rating" required>
+                    <option value="" disabled selected>Calificación</option>
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select>
+                <textarea id="comment" placeholder="Tu comentario" required></textarea>
+                <button type="submit">Enviar reseña</button>
+            </form>
+        </section>
+
+        <section id="booking" class="container">
+            <h2>Reserva tu Cita</h2>
+            <form class="booking-form">
+                <input type="text" name="name" placeholder="Tu Nombre" required>
+                <input type="email" name="email" placeholder="Tu Email" required>
+                <select name="service" required>
+                    <option value="" disabled selected>Elige un servicio...</option>
+                    <option value="corte-caballero">Corte Caballero</option>
+                    <option value="corte-barba">Corte Caballero + Barba</option>
+                    <option value="recorte-barba">Recorte de Barba</option>
+                </select>
+                <input type="date" name="date" required>
+                <input type="time" name="time" required>
+                <button type="submit" class="btn-primary">Confirmar Reserva</button>
+            </form>
+        </section>
+    </main>
+
+    <footer id="contact" class="footer-main">
+        <p>&copy; 2025 ACStudio. Todos los derechos reservados.</p>
+        <p>Calle Falsa 123, Springfield | Tel: (123) 456-7890</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
