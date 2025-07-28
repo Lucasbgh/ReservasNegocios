@@ -1,17 +1,40 @@
 /* css/style.css */
 
+html {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     background-color: #1a1a1a;
     color: #f0f0f0;
     line-height: 1.6;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .container {
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
     max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    .nav-main {
+        padding: 0 1rem;
+    }
 }
 
 /* Header y Navegación */
@@ -214,8 +237,20 @@ h2 {
 
 .reviews-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* Default to 3 columns */
     gap: 2rem;
+}
+
+@media (max-width: 992px) { /* For medium screens, allow 2 columns */
+    .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) { /* For small screens, allow 1 column */
+    .reviews-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 .review-card {
@@ -247,7 +282,9 @@ h2 {
 .review-card p {
     color: #ccc;
     font-style: italic;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Older property, kept for compatibility */
+    overflow-wrap: break-word; /* Standard property */
+    word-break: break-word; /* Force break long words */
     white-space: normal;
 }
 
