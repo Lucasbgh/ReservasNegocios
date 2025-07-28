@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Lógica de Reseñas ---
 
     // Función para cargar las reseñas existentes y calcular la media
-    function loadReviews() {
+    function loadReviews(showAll = false) {
         fetch('/reviews')
             .then(response => {
                 if (!response.ok) {
@@ -37,19 +37,43 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 reviewsContainer.innerHTML = ''; // Limpiar contenedor
                 let totalRating = 0;
+                
+                // Calcular totalRating basado en todas las reseñas
                 data.forEach(review => {
+                    totalRating += parseInt(review.rating);
+                });
+
+                // Sort reviews by a hypothetical timestamp or just reverse for recency
+                // Assuming reviews are added in chronological order, so reverse to get most recent first
+                const sortedReviews = data.slice().reverse(); 
+
+                const reviewsToDisplay = showAll ? sortedReviews : sortedReviews.slice(0, 6);
+
+                reviewsToDisplay.forEach(review => {
                     const reviewElement = document.createElement('div');
                     reviewElement.classList.add('review-card');
+                    
+                    const stars = Array.from({ length: 5 }, (_, i) => {
+                        return `<span>${i < review.rating ? '★' : '☆'}</span>`;
+                    }).join('');
+
                     reviewElement.innerHTML = `
                         <div class="review-header">
                             <h4>${review.name}</h4>
-                            <div class="star-rating">${'&#9733;'.repeat(review.rating)}${'&#9734;'.repeat(5 - review.rating)}</div>
+                            <div class="star-rating">${stars}</div>
                         </div>
                         <p>"${review.comment}"</p>
                     `;
                     reviewsContainer.appendChild(reviewElement);
-                    totalRating += parseInt(review.rating);
                 });
+
+                // Mostrar u ocultar el botón "Mostrar todas las reseñas"
+                const showAllReviewsBtn = document.getElementById('show-all-reviews-btn');
+                if (sortedReviews.length > 6 && !showAll) {
+                    showAllReviewsBtn.style.display = 'block';
+                } else {
+                    showAllReviewsBtn.style.display = 'none';
+                }
 
                 // Calcular y mostrar la media de las estrellas
                 const averageRatingElement = document.getElementById('average-rating');
@@ -70,13 +94,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar las reseñas al iniciar la página
     loadReviews();
 
+    // Event listener para el botón "Mostrar todas las reseñas"
+    const showAllReviewsBtn = document.getElementById('show-all-reviews-btn');
+    if (showAllReviewsBtn) {
+        showAllReviewsBtn.addEventListener('click', () => {
+            loadReviews(true);
+        });
+    }
+
     // Enviar una nueva reseña
     if (reviewForm) {
+        const commentInput = document.getElementById('comment');
+        const charCountDisplay = document.getElementById('char-count');
+
+        // Update character count on input
+        commentInput.addEventListener('input', () => {
+            const currentLength = commentInput.value.length;
+            charCountDisplay.textContent = `${currentLength}/500`;
+        });
+
         reviewForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const nameInput = document.getElementById('name');
             const ratingInput = document.getElementById('rating');
-            const commentInput = document.getElementById('comment');
 
             const name = nameInput.value;
             const rating = ratingInput.value;
@@ -93,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.ok) {
                     loadReviews();
                     reviewForm.reset();
+                    charCountDisplay.textContent = '0/500'; // Reset counter on successful submission
                 } else {
                     alert('Hubo un error al enviar tu reseña.');
                 }

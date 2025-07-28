@@ -182,6 +182,12 @@ app.get('/reviews', (req, res) => {
 
 app.post('/reviews', (req, res) => {
   const { name, rating, comment } = req.body;
+
+  // Server-side validation for comment length
+  if (comment.length > 500) {
+    return res.status(400).send('Review comment exceeds maximum length of 500 characters.');
+  }
+
   reviews.push({ name, rating: parseInt(rating), comment });
   saveReviews(); // Save reviews after adding a new one
   res.status(201).send('Review added');

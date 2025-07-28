@@ -15,6 +15,7 @@
                 <li><a href="#booking">Reservar</a></li>
                 <li><a href="#team">Barberos</a></li>
                 <li><a href="#reviews">Reseñas</a></li>
+                <li><a href="#review-form">Dejar Reseña</a></li>
                 <li><a href="#contact">Contacto</a></li>
             </ul>
         </nav>
@@ -97,8 +98,10 @@
                     
                     <img src="res/barber1.avif" alt="Barbero Pepe Ramírez">
                     
-                    <h4>Pepe Ramírez</h4>
-                    <p>Especialista en cortes clásicos y modernos, con más de 10 años de experiencia.</p>
+                    <div class="team-member-info">
+                        <h4>Pepe Ramírez</h4>
+                        <p>Especialista en cortes clásicos y modernos, con más de 10 años de experiencia.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -109,6 +112,7 @@
             <div id="reviews-container" class="reviews-grid">
                 <!-- Las reseñas se cargarán aquí -->
             </div>
+            <button id="show-all-reviews-btn" class="btn-primary" style="display: none; margin: 2rem auto;" >Mostrar todas las reseñas</button>
             <form id="review-form">
                 <h3>Deja tu reseña</h3>
                 <input type="text" id="name" placeholder="Tu nombre" required>
@@ -120,7 +124,8 @@
                     <option value="2">★★☆☆☆</option>
                     <option value="1">★☆☆☆☆</option>
                 </select>
-                <textarea id="comment" placeholder="Tu comentario" required></textarea>
+                <textarea id="comment" placeholder="Tu comentario" required maxlength="500"></textarea>
+                <div id="char-count" style="text-align: right; font-size: 0.9em; color: #ccc;">0/500</div>
                 <button type="submit">Enviar reseña</button>
             </form>
         </section>

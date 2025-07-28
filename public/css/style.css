@@ -9,7 +9,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
 }
@@ -28,7 +28,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 0 2rem;
 }
@@ -45,7 +45,7 @@ body {
     list-style: none;
     display: flex;
     gap: 2rem;
-    margin: 0;
+    margin: 0 0 0 auto; /* Added margin-left: auto to push it to the right */
     padding: 0;
 }
 
@@ -112,7 +112,7 @@ h2 {
 /* Servicios */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     gap: 2rem;
 }
 
@@ -162,8 +162,11 @@ h2 {
 }
 
 .team-member {
-    text-align: center;
-    max-width: 250px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    max-width: 500px; /* Increased max-width to accommodate image and text side-by-side */
+    gap: 1.5rem; /* Space between image and text */
 }
 
 .team-member img {
@@ -172,22 +175,27 @@ h2 {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #c9a957;
-    margin-bottom: 1rem;
+    flex-shrink: 0; /* Prevent image from shrinking */
+    margin-bottom: 0; /* Remove bottom margin as it's now flex item */
+}
+
+.team-member-info {
+    display: flex;
+    flex-direction: column;
 }
 
 .team-member h4 {
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
     color: #c9a957;
-    margin: 0.5rem 0;
+    margin: 0 0 0.5rem 0; /* Adjust margin for h4 */
 }
 
 .team-member p {
     color: #ccc;
     font-size: 1rem;
+    margin: 0; /* Remove margin for p */
 }
-
-/* Reseñas */
 .average-rating {
     text-align: center;
     margin-bottom: 2rem;
@@ -206,7 +214,7 @@ h2 {
 
 .reviews-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2rem;
 }
 
@@ -232,13 +240,15 @@ h2 {
 }
 
 .star-rating span {
-    color: #c9a957;
-    font-size: 1.2rem;
+    color: white;
+    font-size: 2.5em;
 }
 
 .review-card p {
     color: #ccc;
     font-style: italic;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 #review-form {
