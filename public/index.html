@@ -33,41 +33,75 @@
             <h2>Nuestros Servicios</h2>
             <div class="services-grid">
                 <div class="service-card">
-                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Corte+Caballero" alt="Corte de Caballero">
+                    <!--
+                    <img src="res/fondo1.png" alt="Corte de Caballero">
+                    -->
                     <h3>Corte Caballero</h3>
                     <p>Estilo y precisión para un look impecable.</p>
+                    <span class="service-price">10€</span>
                 </div>
                 <div class="service-card">
-                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Corte+%2B+Barba" alt="Corte de Caballero + Barba">
+                    <!--
+                    <img src="res/fondo1.png" alt="Corte de Caballero + Barba">
+                    -->
                     <h3>Corte Caballero + Barba</h3>
                     <p>El pack completo para un estilo definido y cuidado.</p>
+                    <span class="service-price">12€</span>
                 </div>
                 <div class="service-card">
-                    <img src="https://via.placeholder.com/300x200/1a1a1a/c9a957?text=Recorte+de+Barba" alt="Recorte de Barba">
+                    <!--
+                    <img src="res/fondo1.png" alt="Recorte de Barba">
+                    -->
                     <h3>Recorte de Barba</h3>
                     <p>Define y perfila tu barba con maestría.</p>
+                    <span class="service-price">5€</span>
                 </div>
             </div>
         </section>
 
+        <section id="booking" class="container">
+            <h2>Reserva tu Cita</h2>
+            <form class="booking-form">
+                <input type="text" name="name" placeholder="Tu Nombre" required>
+                <input type="text" name="email" placeholder="Tu Email" required>
+                <select name="service" required>
+                    <option value="" disabled selected>Elige un servicio...</option>
+                    <option value="corte-caballero">Corte Caballero</option>
+                    <option value="corte-barba">Corte Caballero + Barba</option>
+                    <option value="recorte-barba">Recorte de Barba</option>
+                </select>
+                <div class="date-time-picker">
+                    <div class="date-nav">
+                        <button type="button" id="prev-day">&lt;</button>
+                        <span id="current-date"></span>
+                        <button type="button" id="next-day">&gt;</button>
+                    </div>
+                    <div id="time-slots" class="time-slots-grid">
+                        <!-- Horas disponibles se cargarán aquí -->
+                    </div>
+                </div>
+                <input type="hidden" id="selected-date-input" name="date">
+                <input type="hidden" id="selected-time-input" name="time">
+                <button type="submit" class="btn-primary">Reservar</button>
+            </form>
+        </section>
+
         <section id="team" class="container">
-            <h2>Nuestro Equipo</h2>
+            <h2>Nuestro Barbero</h2>
             <div class="team-grid">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/250x250/1a1a1a/c9a957?text=Alex" alt="Barbero Alex">
-                    <h4>Alex "El Maestro"</h4>
-                    <p>Especialista en cortes clásicos y diseños modernos.</p>
-                </div>
-                <div class="team-member">
-                    <img src="https://via.placeholder.com/250x250/1a1a1a/c9a957?text=Carlos" alt="Barbero Carlos">
-                    <h4>Carlos "El Detallista"</h4>
-                    <p>El rey de las barbas y los afeitados perfectos.</p>
+                    
+                    <img src="res/barber1.avif" alt="Barbero Pepe Ramírez">
+                    
+                    <h4>Pepe Ramírez</h4>
+                    <p>Especialista en cortes clásicos y modernos, con más de 10 años de experiencia.</p>
                 </div>
             </div>
         </section>
 
         <section id="reviews" class="container">
             <h2>Lo que dicen nuestros clientes</h2>
+            <div id="average-rating" class="average-rating"></div>
             <div id="reviews-container" class="reviews-grid">
                 <!-- Las reseñas se cargarán aquí -->
             </div>
@@ -86,29 +120,37 @@
                 <button type="submit">Enviar reseña</button>
             </form>
         </section>
-
-        <section id="booking" class="container">
-            <h2>Reserva tu Cita</h2>
-            <form class="booking-form">
-                <input type="text" name="name" placeholder="Tu Nombre" required>
-                <input type="email" name="email" placeholder="Tu Email" required>
-                <select name="service" required>
-                    <option value="" disabled selected>Elige un servicio...</option>
-                    <option value="corte-caballero">Corte Caballero</option>
-                    <option value="corte-barba">Corte Caballero + Barba</option>
-                    <option value="recorte-barba">Recorte de Barba</option>
-                </select>
-                <input type="date" name="date" required>
-                <input type="time" name="time" required>
-                <button type="submit" class="btn-primary">Confirmar Reserva</button>
-            </form>
-        </section>
     </main>
 
     <footer id="contact" class="footer-main">
         <p>&copy; 2025 ZMBarber. Todos los derechos reservados.</p>
         <p>Calle Falsa 123, Springfield | Tel: (123) 456-7890</p>
     </footer>
+
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="booking-details-content">
+                <h3>Confirmar Reserva</h3>
+                <p>Estás a punto de reservar:</p>
+                <p>Día: <strong id="modal-date"></strong></p>
+                <p>Hora: <strong id="modal-time"></strong></p>
+                <p>Servicio: <strong id="modal-service"></strong></p>
+                <p>En: <strong>ZM Barbería</strong></p>
+                <p>Dirección: <strong>Calle Falsa 123, Springfield</strong></p>
+                <button id="confirm-booking-btn" class="btn-primary">Confirmar Reserva</button>
+            </div>
+            <div id="booking-success-message" style="display: none;">
+                <p class="success-icon">&#10004;</p>
+                <h3>¡Reserva Confirmada con Éxito!</h3>
+                <p><strong>Día:</strong> <span id="success-date"></span></p>
+                <p><strong>Hora:</strong> <span id="success-time"></span></p>
+                <p><strong>Servicio:</strong> <span id="success-service"></span></p>
+                <p>Te esperamos en <strong>ZM Barbería</strong></p>
+                <p><strong>Dirección:</strong> Calle Falsa 123, Springfield</p>
+            </div>
+        </div>
+    </div>
 
     <script src="js/script.js"></script>
 </body>

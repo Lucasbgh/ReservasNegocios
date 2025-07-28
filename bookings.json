@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Lucas",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-29",
+    "time": "17:00",
+    "bookingDate": "2025-07-28T18:03:20.633Z"
+  },
+  {
+    "name": "LucasB",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-29",
+    "time": "17:30",
+    "bookingDate": "2025-07-28T18:03:41.513Z"
+  },
+  {
+    "name": "Lucasss",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-29",
+    "time": "17:15",
+    "bookingDate": "2025-07-28T18:12:21.117Z"
+  },
+  {
+    "name": "Lucasbbb",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-29",
+    "time": "18:00",
+    "bookingDate": "2025-07-28T18:14:36.848Z"
+  },
+  {
+    "name": "Lucas m",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-31",
+    "time": "17:45",
+    "bookingDate": "2025-07-28T18:20:32.964Z"
+  },
+  {
+    "name": "aaaaaa",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-29",
+    "time": "17:45",
+    "bookingDate": "2025-07-28T18:21:38.448Z"
+  },
+  {
+    "name": "dsd",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-31",
+    "time": "17:15",
+    "bookingDate": "2025-07-28T18:21:57.639Z"
+  },
+  {
+    "name": "aasas",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-31",
+    "time": "17:30",
+    "bookingDate": "2025-07-28T18:22:10.140Z"
+  },
+  {
+    "name": "asdsdf",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-08-01",
+    "time": "17:30",
+    "bookingDate": "2025-07-28T18:26:14.983Z"
+  },
+  {
+    "name": "asdasdasd",
+    "email": "a@gmail.com",
+    "service": "corte-caballero",
+    "date": "2025-07-31",
+    "time": "18:00",
+    "bookingDate": "2025-07-28T18:34:33.597Z"
+  }
+]
