@@ -126,7 +126,7 @@ section {
 
 h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
+    font-size: 2em;
     text-align: center;
     margin-bottom: 3rem;
     color: #c9a957;
@@ -258,6 +258,8 @@ h2 {
     border-radius: 10px;
     padding: 2rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
 }
 
 .review-header {
@@ -274,11 +276,6 @@ h2 {
     font-size: 1.2rem;
 }
 
-.star-rating span {
-    color: white;
-    font-size: 2.5em;
-}
-
 .review-card p {
     color: #ccc;
     font-style: italic;
@@ -287,6 +284,17 @@ h2 {
     word-break: break-word; /* Force break long words */
     white-space: normal;
 }
+
+.star-rating {
+    margin-top: 1rem; /* Espacio entre el texto y las estrellas */
+    align-self: flex-start; /* Alinea las estrellas a la izquierda */
+}
+
+.star-rating span {
+  font-size: 2.0em;
+  color: #ffffff; /* opcional: da color a las estrellas */
+}
+
 
 #review-form {
     margin-top: 2rem;

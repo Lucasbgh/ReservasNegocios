@@ -60,9 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     reviewElement.innerHTML = `
                         <div class="review-header">
                             <h4>${review.name}</h4>
-                            <div class="star-rating">${stars}</div>
                         </div>
                         <p>"${review.comment}"</p>
+                        <div class="star-rating">${stars}</div>
                     `;
                     reviewsContainer.appendChild(reviewElement);
                 });
