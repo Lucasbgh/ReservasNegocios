@@ -5,78 +5,30 @@
     "service": "corte-caballero",
     "date": "2025-07-29",
     "time": "17:00",
-    "bookingDate": "2025-07-28T18:03:20.633Z"
+    "bookingDate": "2025-07-28T19:44:33.446Z"
   },
   {
-    "name": "LucasB",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-07-29",
-    "time": "17:30",
-    "bookingDate": "2025-07-28T18:03:41.513Z"
-  },
-  {
-    "name": "Lucasss",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-07-29",
-    "time": "17:15",
-    "bookingDate": "2025-07-28T18:12:21.117Z"
-  },
-  {
-    "name": "Lucasbbb",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-07-29",
-    "time": "18:00",
-    "bookingDate": "2025-07-28T18:14:36.848Z"
-  },
-  {
-    "name": "Lucas m",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-07-31",
-    "time": "17:45",
-    "bookingDate": "2025-07-28T18:20:32.964Z"
-  },
-  {
-    "name": "aaaaaa",
-    "email": "a@gmail.com",
+    "name": "asasdas",
+    "email": "as",
     "service": "corte-caballero",
     "date": "2025-07-29",
     "time": "17:45",
-    "bookingDate": "2025-07-28T18:21:38.448Z"
+    "bookingDate": "2025-07-28T20:46:15.803Z"
   },
   {
-    "name": "dsd",
-    "email": "a@gmail.com",
+    "name": "Lucas",
+    "email": "lucasbarrosomolina@gmail.com",
     "service": "corte-caballero",
-    "date": "2025-07-31",
+    "date": "2025-07-29",
     "time": "17:15",
-    "bookingDate": "2025-07-28T18:21:57.639Z"
+    "bookingDate": "2025-07-28T21:59:01.119Z"
   },
   {
-    "name": "aasas",
-    "email": "a@gmail.com",
+    "name": "LucasBM",
+    "email": "lucasbarrosomolina@gmail.com",
     "service": "corte-caballero",
-    "date": "2025-07-31",
-    "time": "17:30",
-    "bookingDate": "2025-07-28T18:22:10.140Z"
-  },
-  {
-    "name": "asdsdf",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-08-01",
-    "time": "17:30",
-    "bookingDate": "2025-07-28T18:26:14.983Z"
-  },
-  {
-    "name": "asdasdasd",
-    "email": "a@gmail.com",
-    "service": "corte-caballero",
-    "date": "2025-07-31",
-    "time": "18:00",
-    "bookingDate": "2025-07-28T18:34:33.597Z"
+    "date": "2025-08-02",
+    "time": "10:15",
+    "bookingDate": "2025-07-28T22:08:46.917Z"
   }
 ]

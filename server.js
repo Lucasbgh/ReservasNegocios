@@ -1,6 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -8,6 +10,15 @@ const port = process.env.PORT || 3000;
 const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 const SCHEDULE_FILE = path.join(__dirname, 'schedule.json');
 const BOOKINGS_FILE = path.join(__dirname, 'bookings.json');
+
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
@@ -55,19 +66,27 @@ fs.readFile(SCHEDULE_FILE, (err, data) => {
           viernes: ["17:00", "17:15", "17:30", "17:45", "18:00"],
           sábado: ["10:00", "10:15", "10:30", "10:45", "11:00"]
         },
-        closedDates: []
+        closedDates: [],
+        closedDaysOfWeek: [],
+        annualClosedDates: []
       };
       saveSchedule(); // Save default schedule
+      console.log('Default schedule created and saved:', schedule); // Log default schedule
     } else {
       console.error('Error reading schedule file:', err);
     }
   } else {
     try {
-      schedule = JSON.parse(data);
-      console.log('Schedule loaded successfully.');
+      const parsedSchedule = JSON.parse(data);
+      schedule = {
+        ...parsedSchedule,
+        closedDaysOfWeek: parsedSchedule.closedDaysOfWeek || [], // Ensure closedDaysOfWeek is always an array
+        annualClosedDates: parsedSchedule.annualClosedDates || [] // Ensure annualClosedDates is always an array
+      };
+      console.log('Schedule loaded successfully on startup:', schedule); // Log loaded schedule
     } catch (parseErr) {
       console.error('Error parsing schedule JSON:', parseErr);
-      schedule = {};
+      schedule = { closedDaysOfWeek: [], annualClosedDates: [] }; // Initialize with empty arrays on parse error
     }
   }
 });
@@ -108,8 +127,6 @@ function saveSchedule() {
   fs.writeFile(SCHEDULE_FILE, JSON.stringify(schedule, null, 2), (err) => {
     if (err) {
       console.error('Error writing schedule file:', err);
-    } else {
-      console.log('Schedule saved successfully.');
     }
   });
 }
@@ -125,6 +142,40 @@ function saveBookings() {
   });
 }
 
+// Function to send booking confirmation email
+async function sendBookingConfirmationEmail(bookingDetails) {
+    const { name, email, service, date, time } = bookingDetails;
+
+    const mailOptions = {
+        from: `"ZM Barbería" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Confirmación de tu reserva en ZM Barbería',
+        html: `
+            <div style="font-family: Arial, sans-serif; color: #333;">
+                <h2>¡Hola, ${name}!</h2>
+                <p>Tu reserva ha sido confirmada con éxito.</p>
+                <h3>Detalles de la reserva:</h3>
+                <ul>
+                    <li><strong>Servicio:</strong> ${service}</li>
+                    <li><strong>Día:</strong> ${date}</li>
+                    <li><strong>Hora:</strong> ${time}</li>
+                </ul>
+                <p>Te esperamos en <strong>ZM Barbería</strong>.</p>
+                <p><em>Calle Falsa 123, Springfield</em></p>
+                <br>
+                <p>Si necesitas cancelar o modificar tu cita, por favor, contáctanos.</p>
+            </div>
+        `,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Confirmation email sent successfully to:', email);
+    } catch (error) {
+        console.error('Error sending confirmation email:', error);
+    }
+}
+
 app.get('/reviews', (req, res) => {
   res.json(reviews);
 });
@@ -138,7 +189,24 @@ app.post('/reviews', (req, res) => {
 
 // New endpoint to get schedule
 app.get('/schedule', (req, res) => {
-  res.json(schedule);
+  fs.readFile(SCHEDULE_FILE, (err, data) => {
+    if (err) {
+      console.error('Error reading schedule file:', err);
+      return res.status(500).send('Error loading schedule.');
+    }
+    try {
+      const parsedSchedule = JSON.parse(data);
+      schedule = {
+        ...parsedSchedule,
+        closedDaysOfWeek: parsedSchedule.closedDaysOfWeek || [], // Ensure closedDaysOfWeek is always an array
+        annualClosedDates: parsedSchedule.annualClosedDates || [] // Ensure annualClosedDates is always an array
+      };
+      res.json(schedule);
+    } catch (parseErr) {
+      console.error('Error parsing schedule JSON:', parseErr);
+      res.status(500).send('Error parsing schedule.');
+    }
+  });
 });
 
 app.post('/schedule', (req, res) => {
@@ -149,45 +217,64 @@ app.post('/schedule', (req, res) => {
 
 // New endpoint to handle bookings
 app.post('/book', (req, res) => {
-  const { name, email, service, date, time } = req.body;
+  const { name, email, service, date, time, sendConfirmationEmail } = req.body;
 
   // Basic validation
   if (!name || !email || !service || !date || !time) {
     return res.status(400).send('Missing required booking information.');
   }
 
-  // Check if the time slot is actually available for the given date
-  const dayOfWeek = new Date(date).toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
-  if (!schedule.weeklySchedule[dayOfWeek] || !schedule.weeklySchedule[dayOfWeek].includes(time)) {
-    return res.status(400).send('Selected time slot is not available.');
-  }
-
-  // Remove the booked time from the schedule for that specific day
-  const dateObj = new Date(date);
-  const year = dateObj.getFullYear();
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(dateObj.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
-
-  // Find the day in weeklySchedule and remove the time
-  if (schedule.weeklySchedule[dayOfWeek]) {
-    const index = schedule.weeklySchedule[dayOfWeek].indexOf(time);
-    if (index > -1) {
-      schedule.weeklySchedule[dayOfWeek].splice(index, 1);
-    }
-  }
-
-  // Also, if it's a specific closed date, we might need to handle that too
-  // For simplicity, we're just removing from weeklySchedule for now.
-
-  saveSchedule(); // Save updated schedule
+  console.log('Received booking request:', { name, email, service, date, time, sendConfirmationEmail });
 
   const newBooking = { name, email, service, date, time, bookingDate: new Date().toISOString() };
   bookings.push(newBooking);
-  saveBookings(); // Save new booking
+  saveBookings();
+
+  // Send confirmation email if requested
+  if (sendConfirmationEmail) {
+    sendBookingConfirmationEmail(newBooking);
+  }
 
   res.status(201).send('Booking successful!');
 });
+
+// New endpoint to get available time slots for a specific date
+app.get('/api/available-slots', (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    return res.status(400).send('Date parameter is required.');
+  }
+
+  const dateObj = new Date(date);
+  const dayOfWeek = dateObj.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+  const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+  const formattedMonthDay = `${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+
+  // Check if the day of the week is explicitly closed
+  if (schedule.closedDaysOfWeek && schedule.closedDaysOfWeek.includes(dayOfWeek)) {
+    return res.json([]); // Return empty array if the day is closed
+  }
+
+  // Check if the date is an annual closed date
+  if (schedule.annualClosedDates && schedule.annualClosedDates.includes(formattedMonthDay)) {
+    return res.json([]); // Return empty array if the date is annually closed
+  }
+
+  // Get base schedule for the day
+  const baseTimes = schedule.weeklySchedule[dayOfWeek] || [];
+
+  // Filter out already booked times for this specific date
+  const bookedTimesForDate = bookings
+    .filter(booking => booking.date === formattedDate)
+    .map(booking => booking.time);
+
+  const availableTimes = baseTimes.filter(time => !bookedTimesForDate.includes(time));
+
+  res.json(availableTimes);
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

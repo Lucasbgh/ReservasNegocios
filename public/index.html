@@ -12,9 +12,9 @@
             <a href="#" class="logo">ZMBarber</a>
             <ul>
                 <li><a href="#services">Servicios</a></li>
+                <li><a href="#booking">Reservar</a></li>
                 <li><a href="#team">Barberos</a></li>
                 <li><a href="#reviews">Reseñas</a></li>
-                <li><a href="#booking">Reservar</a></li>
                 <li><a href="#contact">Contacto</a></li>
             </ul>
         </nav>
@@ -64,6 +64,10 @@
             <form class="booking-form">
                 <input type="text" name="name" placeholder="Tu Nombre" required>
                 <input type="text" name="email" placeholder="Tu Email" required>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="confirm-email" name="confirmEmail" checked>
+                    <label for="confirm-email">Enviar confirmación de reserva por email</label>
+                </div>
                 <select name="service" required>
                     <option value="" disabled selected>Elige un servicio...</option>
                     <option value="corte-caballero">Corte Caballero</option>

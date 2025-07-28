@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error al cargar las reseñas:', error);
-                reviewsContainer.innerHTML = '<p>No se pudieron cargar las reseñas. Inténtalo de nuevo másmás tarde.</p>';
+                reviewsContainer.innerHTML = '<p>No se pudieron cargar las reseñas. Inténtalo de nuevo más tarde.</p>';
                 document.getElementById('average-rating').innerHTML = '<p>No se pudo calcular la media de las reseñas.</p>';
             });
     }
@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             scheduleConfig = data;
+            console.log('scheduleConfig after fetch:', scheduleConfig); // Log fetched schedule
             updateDateDisplay(); // Initial render after fetching schedule
         })
         .catch(error => {
@@ -151,7 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     viernes: ["17:00", "17:15", "17:30", "17:45", "18:00"],
                     sábado: ["10:00", "10:15", "10:30", "10:45", "11:00"]
                 },
-                closedDates: []
+                closedDates: [],
+                closedDaysOfWeek: [],
+                annualClosedDates: []
             };
             updateDateDisplay();
         });
@@ -177,47 +180,86 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentDisplayedDateOnly = new Date(currentDisplayedDate);
         currentDisplayedDateOnly.setHours(0, 0, 0, 0);
 
-        const dayOfWeek = currentDisplayedDate.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
         const formattedDate = formatDateForInput(currentDisplayedDate);
+        const dayOfWeek = currentDisplayedDate.toLocaleDateString('es-ES', { weekday: 'long' }).toLowerCase();
+        const formattedMonthDay = `${String(currentDisplayedDate.getMonth() + 1).padStart(2, '0')}-${String(currentDisplayedDate.getDate()).padStart(2, '0')}`;
 
-        const isClosedDate = scheduleConfig.closedDates && scheduleConfig.closedDates.includes(formattedDate);
-        const availableTimesForDay = scheduleConfig.weeklySchedule && scheduleConfig.weeklySchedule[dayOfWeek];
-
-        if (isClosedDate || !availableTimesForDay || availableTimesForDay.length === 0) {
+        // Check if the day of the week is explicitly closed
+        if (scheduleConfig.closedDaysOfWeek && scheduleConfig.closedDaysOfWeek.includes(dayOfWeek)) {
             const message = document.createElement('p');
             message.classList.add('closed-message');
-            message.textContent = isClosedDate ? 'Cerrado por fecha especial.' : 'Cerrado este día.';
+            message.textContent = 'Cerrado este día.'; // Message for explicitly closed days of week
             timeSlotsContainer.appendChild(message);
             return;
         }
 
-        availableTimesForDay.forEach(time => {
-            const timeSlot = document.createElement('div');
-            timeSlot.classList.add('time-slot');
-            timeSlot.textContent = time;
+        // Check if the specific date is explicitly closed
+        const isClosedDate = scheduleConfig.closedDates && scheduleConfig.closedDates.includes(formattedDate);
+        if (isClosedDate) {
+            const message = document.createElement('p');
+            message.classList.add('closed-message');
+            message.textContent = 'Cerrado por fecha especial.'; // Message for explicitly closed dates
+            timeSlotsContainer.appendChild(message);
+            return;
+        }
 
-            // Disable past times for today
-            if (currentDisplayedDateOnly.getTime() === today.getTime()) {
-                const [hour, minute] = time.split(':').map(Number);
-                const slotDateTime = new Date(currentDisplayedDate);
-                slotDateTime.setHours(hour, minute, 0, 0);
-                if (slotDateTime.getTime() < new Date().getTime()) {
-                    timeSlot.classList.add('disabled');
+        // Check if the date is an annual closed date
+        const isAnnualClosedDate = scheduleConfig.annualClosedDates && scheduleConfig.annualClosedDates.includes(formattedMonthDay);
+        if (isAnnualClosedDate) {
+            const message = document.createElement('p');
+            message.classList.add('closed-message');
+            message.textContent = 'Cerrado por fecha especial.'; // Message for annually closed dates
+            timeSlotsContainer.appendChild(message);
+            return;
+        }
+
+        // Fetch available slots from the new API endpoint
+        fetch(`/api/available-slots?date=${formattedDate}`)
+            .then(response => response.json())
+            .then(availableTimesForDay => {
+                if (!availableTimesForDay || availableTimesForDay.length === 0) {
+                    const message = document.createElement('p');
+                    message.classList.add('closed-message');
+                    message.textContent = 'No hay horas disponibles para este día.'; // Message for fully booked days
+                    timeSlotsContainer.appendChild(message);
+                    return;
                 }
-            }
 
-            timeSlot.addEventListener('click', () => {
-                if (timeSlot.classList.contains('disabled')) return; // Do nothing if disabled
+                availableTimesForDay.forEach(time => {
+                    const timeSlot = document.createElement('div');
+                    timeSlot.classList.add('time-slot');
+                    timeSlot.textContent = time;
 
-                document.querySelectorAll('.time-slot').forEach(slot => {
-                    slot.classList.remove('active');
+                    // Disable past times for today
+                    if (currentDisplayedDateOnly.getTime() === today.getTime()) {
+                        const [hour, minute] = time.split(':').map(Number);
+                        const slotDateTime = new Date(currentDisplayedDate);
+                        slotDateTime.setHours(hour, minute, 0, 0);
+                        if (slotDateTime.getTime() < new Date().getTime()) {
+                            timeSlot.classList.add('disabled');
+                        }
+                    }
+
+                    timeSlot.addEventListener('click', () => {
+                        if (timeSlot.classList.contains('disabled')) return; // Do nothing if disabled
+
+                        document.querySelectorAll('.time-slot').forEach(slot => {
+                            slot.classList.remove('active');
+                        });
+                        timeSlot.classList.add('active');
+                        selectedTimeInput.value = time;
+                        selectedDateInput.value = formattedDate;
+                    });
+                    timeSlotsContainer.appendChild(timeSlot);
                 });
-                timeSlot.classList.add('active');
-                selectedTimeInput.value = time;
-                selectedDateInput.value = formattedDate;
+            })
+            .catch(error => {
+                console.error('Error fetching available slots:', error);
+                const message = document.createElement('p');
+                message.classList.add('error-message');
+                message.textContent = 'No se pudieron cargar las horas disponibles. Inténtalo de nuevo más tarde.';
+                timeSlotsContainer.appendChild(message);
             });
-            timeSlotsContainer.appendChild(timeSlot);
-        });
     }
 
     function updateDateDisplay() {
@@ -302,6 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const service = bookingForm.service.value;
             const date = selectedDateInput.value;
             const time = selectedTimeInput.value;
+            const sendConfirmationEmail = bookingForm.querySelector('#confirm-email').checked;
 
             if (!date || !time) {
                 alert('Por favor, selecciona una fecha y hora para tu reserva.');
@@ -319,13 +362,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const service = bookingForm.service.value;
         const date = selectedDateInput.value;
         const time = selectedTimeInput.value;
+        const sendConfirmationEmail = bookingForm.querySelector('#confirm-email').checked;
 
         fetch('/book', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, service, date, time })
+            body: JSON.stringify({ name, email, service, date, time, sendConfirmationEmail })
         })
         .then(response => {
             if (response.ok) {
@@ -346,13 +390,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 bookingForm.reset();
                 // Re-fetch schedule and update display to reflect new availability
-                fetch('/schedule')
+                fetch(`/api/available-slots?date=${formatDateForInput(currentDisplayedDate)}`)
                     .then(res => res.json())
                     .then(data => {
-                        scheduleConfig = data;
-                        updateDateDisplay();
+                        // scheduleConfig is no longer directly used for available times
+                        // We just need to trigger a re-render of time slots
+                        renderTimeSlots();
                     })
-                    .catch(err => console.error('Error re-fetching schedule:', err));
+                    .catch(err => console.error('Error re-fetching available slots:', err));
             } else {
                 response.text().then(text => alert(`Error al confirmar la reserva: ${text}`));
                 closeBookingModal(); // Close modal on error
