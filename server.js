@@ -1,10 +1,9 @@
 const express = require('express');
-const path = require('path');
 const app = express();
 const port = 3000;
 
-// Servir archivos estáticos (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname)));
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
