@@ -29,16 +29,7 @@ body {
     width: 100%; /* Asegura que ocupe todo el ancho disponible */
     max-width: 1600px;
     margin: 0 auto;
-    padding: 2rem;
-}
-
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-    .nav-main {
-        padding: 0 1rem;
-    }
+    padding: clamp(1rem, 5vw, 2rem); /* Padding responsivo */
 }
 
 /* Header y Navegación */
@@ -57,7 +48,26 @@ body {
     align-items: center;
     max-width: 1600px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 clamp(1rem, 5vw, 2rem); /* Padding responsivo */
+}
+
+/* Header y Navegación */
+.header {
+    background-color: #111;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 5vw, 2rem); /* Padding responsivo */
 }
 
 .logo {
