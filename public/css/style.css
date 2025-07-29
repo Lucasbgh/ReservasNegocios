@@ -156,6 +156,7 @@ h2 {
 @media (max-width: 480px) {
     .services-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem; /* Reducir el espacio entre elementos */
     }
 }
 
@@ -194,6 +195,18 @@ h2 {
     padding: 0.5rem 1.5rem 1.5rem;
     text-align: right;
     display: block;
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        padding: 1rem;
+    }
+    .service-card h3,
+    .service-card p,
+    .service-card .service-price {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -691,4 +704,27 @@ h2 {
     color: #f0f0f0;
     font-size: 1rem;
     cursor: pointer;
+}
+
+.phone-input-container {
+    display: flex;
+}
+
+.phone-prefix {
+    width: 60px;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    text-align: center;
+}
+
+.phone-number {
+    flex-grow: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.phone-prefix:focus, .phone-number:focus {
+    z-index: 1;
+    position: relative;
 }

@@ -1,0 +1,384 @@
+/* css/style.css for owner panel */
+
+html {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    line-height: 1.6;
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(1rem, 5vw, 2rem);
+}
+
+/* Header y Navegación */
+.header {
+    background-color: #111;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 5vw, 2rem);
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c9a957;
+    text-decoration: none;
+}
+
+.nav-main ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+.nav-main a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-main a:hover {
+    color: #c9a957;
+}
+
+/* Secciones */
+section {
+    padding: 4rem 0;
+}
+
+h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #c9a957;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #c9a957;
+    color: #1a1a1a;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #b38e43;
+}
+
+/* Formularios */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+form input,
+form select,
+form textarea {
+    padding: 1rem;
+    border: 1px solid #444;
+    background-color: #222;
+    color: #f0f0f0;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+form button {
+    padding: 1rem;
+    background-color: #c9a957;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #b38e43;
+}
+
+/* Footer */
+.footer-main {
+    background-color: #111;
+    color: #888;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+/* Estilos específicos del panel de propietario */
+#bookings-list table,
+#cancelled-bookings-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+#bookings-list th,
+#bookings-list td,
+#cancelled-bookings-list th,
+#cancelled-bookings-list td {
+    padding: 0.8rem;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+#bookings-list th,
+#cancelled-bookings-list th {
+    background-color: #333;
+    color: #c9a957;
+}
+
+#bookings-list tr:nth-child(even),
+#cancelled-bookings-list tr:nth-child(even) {
+    background-color: #222;
+}
+
+#bookings-list tr:hover,
+#cancelled-bookings-list tr:hover {
+    background-color: #3a3a3a;
+}
+
+.cancel-btn,
+.restore-btn {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: #ff4d4d;
+}
+
+.cancel-btn:hover {
+    background-color: #cc0000;
+}
+
+.restore-btn {
+    background-color: #4CAF50; /* Verde */
+}
+
+.restore-btn:hover {
+    background-color: #45a049;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1001; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #222;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+    color: #f0f0f0;
+}
+
+.modal-content h3 {
+    font-family: 'Playfair Display', serif;
+    color: #c9a957;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #f0f0f0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn-confirm, .btn-cancel {
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.btn-confirm {
+    background-color: #c9a957;
+    color: #1a1a1a;
+}
+
+.btn-confirm:hover {
+    background-color: #b38e43;
+}
+
+.btn-confirm:disabled {
+    background-color: #555;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    background-color: #555;
+    color: #f0f0f0;
+}
+
+.btn-cancel:hover {
+    background-color: #777;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 1px solid #c9a957;
+    border-radius: 4px;
+    background-color: #222;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: #c9a957;
+    border-color: #c9a957;
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+    content: '\2713';
+    color: #1a1a1a;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-container label {
+    color: #f0f0f0;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#timer-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #c9a957;
+    margin-bottom: 1rem;
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.error-icon {
+    font-size: 4rem;
+    color: #ff4d4d;
+    margin-bottom: 10px;
+}
+
+#success-message p {
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+#success-message strong {
+    color: #f0f0f0;
+}
+
+.unspecified {
+    color: #888;
+    font-style: italic;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZM Barber - Panel de Propietario</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-main">
+            <a href="#" class="logo">ZMBarber Admin</a>
+            <ul>
+                <li><a href="#bookings">Reservas</a></li>
+                <li><a href="#schedule">Horario</a></li>
+                <li><a href="#settings">Ajustes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="bookings" class="container">
+            <h2>Gestión de Reservas Activas</h2>
+            <div id="bookings-list">
+                <!-- Las reservas activas se cargarán aquí -->
+                <p>Cargando reservas activas...</p>
+            </div>
+        </section>
+
+        <section id="cancelled-bookings" class="container">
+            <h2>Reservas Canceladas</h2>
+            <div id="cancelled-bookings-list">
+                <!-- Las reservas canceladas se cargarán aquí -->
+                <p>Cargando reservas canceladas...</p>
+            </div>
+        </section>
+
+        <section id="schedule" class="container">
+            <h2>Ajustar Horario</h2>
+            <form id="schedule-form">
+                <h3>Días de Reserva Anticipada</h3>
+                <label for="maxAdvanceBookingDays">Máximo de días de reserva anticipada:</label>
+                <input type="number" id="maxAdvanceBookingDays" name="maxAdvanceBookingDays" min="0" value="30">
+
+                <h3>Días de la Semana Cerrados</h3>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="closed-domingo" name="closedDaysOfWeek" value="domingo"><label for="closed-domingo">Domingo</label>
+                    <input type="checkbox" id="closed-lunes" name="closedDaysOfWeek" value="lunes"><label for="closed-lunes">Lunes</label>
+                    <input type="checkbox" id="closed-martes" name="closedDaysOfWeek" value="martes"><label for="closed-martes">Martes</label>
+                    <input type="checkbox" id="closed-miercoles" name="closedDaysOfWeek" value="miércoles"><label for="closed-miercoles">Miércoles</label>
+                    <input type="checkbox" id="closed-jueves" name="closedDaysOfWeek" value="jueves"><label for="closed-jueves">Jueves</label>
+                    <input type="checkbox" id="closed-viernes" name="closedDaysOfWeek" value="viernes"><label for="closed-viernes">Viernes</label>
+                    <input type="checkbox" id="closed-sabado" name="closedDaysOfWeek" value="sábado"><label for="closed-sabado">Sábado</label>
+                </div>
+
+                <h3>Fechas Anuales Cerradas (MM-DD, separadas por comas)</h3>
+                <textarea id="annualClosedDates" name="annualClosedDates" rows="3" placeholder="Ej: 01-01, 12-25"></textarea>
+
+                <h3>Horario Semanal (HH:MM, separadas por comas)</h3>
+                <label for="times-domingo">Domingo:</label>
+                <textarea id="times-domingo" name="weeklySchedule-domingo" rows="2" placeholder="Ej: 10:00, 10:30"></textarea>
+                <label for="times-lunes">Lunes:</label>
+                <textarea id="times-lunes" name="weeklySchedule-lunes" rows="2" placeholder="Ej: 17:00, 17:15"></textarea>
+                <label for="times-martes">Martes:</label>
+                <textarea id="times-martes" name="weeklySchedule-martes" rows="2" placeholder="Ej: 17:00, 17:15"></textarea>
+                <label for="times-miercoles">Miércoles:</label>
+                <textarea id="times-miercoles" name="weeklySchedule-miercoles" rows="2" placeholder="Ej: 17:00, 17:15"></textarea>
+                <label for="times-jueves">Jueves:</label>
+                <textarea id="times-jueves" name="weeklySchedule-jueves" rows="2" placeholder="Ej: 17:00, 17:15"></textarea>
+                <label for="times-viernes">Viernes:</label>
+                <textarea id="times-viernes" name="weeklySchedule-viernes" rows="2" placeholder="Ej: 17:00, 17:15"></textarea>
+                <label for="times-sabado">Sábado:</label>
+                <textarea id="times-sabado" name="weeklySchedule-sabado" rows="2" placeholder="Ej: 10:00, 10:30"></textarea>
+
+                <button type="submit">Guardar Horario</button>
+            </form>
+        </section>
+
+        <section id="settings" class="container">
+            <h2>Ajustes Generales</h2>
+            <p>Opciones de configuración adicionales aquí.</p>
+        </section>
+    </main>
+
+    <footer class="footer-main">
+        <p>&copy; 2025 ZMBarber. Panel de Propietario.</p>
+    </footer>
+
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="confirmation-content">
+                <h3 id="modal-title">Confirmar Acción</h3>
+                <p id="modal-message">¿Estás seguro?</p>
+                <div class="checkbox-container">
+                    <input type="checkbox" id="confirm-checkbox">
+                    <label>Estoy seguro de que quiero continuar.</label>
+                </div>
+                <p id="timer-display">10</p>
+                <div class="modal-buttons">
+                    <button id="confirm-action-btn" class="btn-confirm" disabled>Confirmar</button>
+                    <button id="cancel-action-btn" class="btn-cancel">Cancelar</button>
+                </div>
+            </div>
+            <div id="success-message" style="display: none;">
+                <p id="message-icon" class="success-icon">&#10004;</p>
+                <h3 id="success-title">¡Acción Completada!</h3>
+                <p id="success-text"></p>
+                <div class="modal-buttons">
+                    <button id="close-success-btn" class="btn-primary">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

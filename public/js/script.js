@@ -382,6 +382,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const name = bookingForm.name.value;
             const email = bookingForm.email.value;
+            const phonePrefix = bookingForm.phone_prefix.value;
+            const phoneNumber = bookingForm.phone.value;
             const service = bookingForm.service.value;
             const date = selectedDateInput.value;
             const time = selectedTimeInput.value;
@@ -400,6 +402,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleConfirmBooking() {
         const name = bookingForm.name.value;
         const email = bookingForm.email.value;
+        const phonePrefix = bookingForm.phone_prefix.value;
+        const phoneNumber = bookingForm.phone.value;
+        const phone = phoneNumber ? `${phonePrefix} ${phoneNumber}` : '';
         const service = bookingForm.service.value;
         const date = selectedDateInput.value;
         const time = selectedTimeInput.value;
@@ -410,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, service, date, time, sendConfirmationEmail })
+            body: JSON.stringify({ name, email, phone, service, date, time, sendConfirmationEmail })
         })
         .then(response => {
             if (response.ok) {
@@ -455,4 +460,15 @@ document.addEventListener('DOMContentLoaded', function() {
     confirmBookingBtn.addEventListener('click', handleConfirmBooking);
 
     // Initial render is called after schedule is fetched
+    const emailInput = document.querySelector('input[name="email"]');
+
+    emailInput.addEventListener('input', () => {
+      emailInput.setCustomValidity(""); // Limpia el mensaje anterior si todo va bien
+    });
+
+    emailInput.addEventListener('invalid', () => {
+      if (emailInput.value !== "") {
+        emailInput.setCustomValidity("El correo electrónico no es válido. Por favor, introduce uno correcto (ej: ejemplo@dominio.com) o déjalo en blanco");
+      }
+    });
 });

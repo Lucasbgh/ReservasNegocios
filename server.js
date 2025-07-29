@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 const SCHEDULE_FILE = path.join(__dirname, 'schedule.json');
 const BOOKINGS_FILE = path.join(__dirname, 'bookings.json');
+const CANCELLED_BOOKINGS_FILE = path.join(__dirname, 'cancelled_bookings.json');
 
 // Nodemailer transporter setup
 const transporter = nodemailer.createTransport({
@@ -22,6 +23,7 @@ const transporter = nodemailer.createTransport({
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
+app.use('/owner', express.static('owner'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 let reviews = [];
 let schedule = {};
 let bookings = [];
+let cancelledBookings = []; // New variable
 
 // Load reviews from file on startup
 fs.readFile(REVIEWS_FILE, (err, data) => {
@@ -102,11 +105,39 @@ fs.readFile(BOOKINGS_FILE, (err, data) => {
     }
   } else {
     try {
-      bookings = JSON.parse(data);
-      console.log('Bookings loaded successfully.');
+      let loadedBookings = JSON.parse(data);
+      let idCounter = Date.now(); // Start ID counter from current timestamp
+      bookings = loadedBookings.map(booking => {
+        if (!booking.id) {
+          booking.id = (idCounter++).toString(); // Assign a unique ID
+        }
+        return booking;
+      });
+      console.log('Bookings loaded successfully and IDs ensured.');
+      saveBookings(); // Save to ensure all bookings have IDs persisted
     } catch (parseErr) {
       console.error('Error parsing bookings JSON:', parseErr);
       bookings = [];
+    }
+  }
+});
+
+// Load cancelled bookings from file on startup
+fs.readFile(CANCELLED_BOOKINGS_FILE, (err, data) => {
+  if (err) {
+    if (err.code === 'ENOENT') {
+      console.log('cancelled_bookings.json not found, creating empty array.');
+      cancelledBookings = [];
+    } else {
+      console.error('Error reading cancelled bookings file:', err);
+    }
+  } else {
+    try {
+      cancelledBookings = JSON.parse(data);
+      console.log('Cancelled bookings loaded successfully.');
+    } catch (parseErr) {
+      console.error('Error parsing cancelled bookings JSON:', parseErr);
+      cancelledBookings = [];
     }
   }
 });
@@ -138,6 +169,17 @@ function saveBookings() {
       console.error('Error writing bookings file:', err);
     } else {
       console.log('Bookings saved successfully.');
+    }
+  });
+}
+
+// Save cancelled bookings to file
+function saveCancelledBookings() {
+  fs.writeFile(CANCELLED_BOOKINGS_FILE, JSON.stringify(cancelledBookings, null, 2), (err) => {
+    if (err) {
+      console.error('Error writing cancelled bookings file:', err);
+    } else {
+      console.log('Cancelled bookings saved successfully.');
     }
   });
 }
@@ -193,6 +235,56 @@ app.post('/reviews', (req, res) => {
   res.status(201).send('Review added');
 });
 
+// New endpoint to get all bookings
+app.get('/api/bookings', (req, res) => {
+  res.json(bookings);
+});
+
+// New endpoint to delete a booking by ID
+app.delete('/api/bookings/:id', (req, res) => {
+  const bookingId = req.params.id;
+  const bookingIndex = bookings.findIndex(booking => booking.id === bookingId);
+
+  if (bookingIndex > -1) {
+    const [cancelledBooking] = bookings.splice(bookingIndex, 1);
+    cancelledBookings.push(cancelledBooking);
+    saveBookings();
+    saveCancelledBookings();
+    res.status(200).send('Booking cancelled successfully.');
+  } else {
+    res.status(404).send('Booking not found.');
+  }
+});
+
+// New endpoint to get all cancelled bookings
+app.get('/api/cancelled-bookings', (req, res) => {
+  res.json(cancelledBookings);
+});
+
+// New endpoint to restore a cancelled booking
+app.post('/api/cancelled-bookings/:id/restore', (req, res) => {
+  const bookingId = req.params.id;
+  const cancelledBookingIndex = cancelledBookings.findIndex(booking => booking.id === bookingId);
+
+  if (cancelledBookingIndex > -1) {
+    const restoredBooking = cancelledBookings[cancelledBookingIndex];
+
+    // Check for conflicts
+    const conflict = bookings.find(booking => booking.date === restoredBooking.date && booking.time === restoredBooking.time);
+    if (conflict) {
+      return res.status(409).send('A booking already exists at this time. Please cancel the existing booking first.');
+    }
+
+    cancelledBookings.splice(cancelledBookingIndex, 1);
+    bookings.push(restoredBooking);
+    saveBookings();
+    saveCancelledBookings();
+    res.status(200).send('Booking restored successfully.');
+  } else {
+    res.status(404).send('Cancelled booking not found.');
+  }
+});
+
 // New endpoint to get schedule
 app.get('/schedule', (req, res) => {
   fs.readFile(SCHEDULE_FILE, (err, data) => {
@@ -223,21 +315,21 @@ app.post('/schedule', (req, res) => {
 
 // New endpoint to handle bookings
 app.post('/book', (req, res) => {
-  const { name, email, service, date, time, sendConfirmationEmail } = req.body;
+  const { name, email, phone, service, date, time, sendConfirmationEmail } = req.body;
 
   // Basic validation
-  if (!name || !email || !service || !date || !time) {
+  if (!name || !service || !date || !time) {
     return res.status(400).send('Missing required booking information.');
   }
 
-  console.log('Received booking request:', { name, email, service, date, time, sendConfirmationEmail });
+  console.log('Received booking request:', { name, email, phone, service, date, time, sendConfirmationEmail });
 
-  const newBooking = { name, email, service, date, time, bookingDate: new Date().toISOString() };
+  const newBooking = { id: Date.now().toString(), name, email, phone, service, date, time, bookingDate: new Date().toISOString() };
   bookings.push(newBooking);
   saveBookings();
 
-  // Send confirmation email if requested
-  if (sendConfirmationEmail) {
+  // Send confirmation email if requested and email is provided
+  if (sendConfirmationEmail && email) {
     sendBookingConfirmationEmail(newBooking);
   }
 
