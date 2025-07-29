@@ -153,6 +153,12 @@ h2 {
     gap: 2rem;
 }
 
+@media (max-width: 480px) {
+    .services-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
 .service-card {
     background-color: #222;
     border-radius: 10px;
@@ -188,6 +194,38 @@ h2 {
     padding: 0.5rem 1.5rem 1.5rem;
     text-align: right;
     display: block;
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        padding: 1rem;
+    }
+    .service-card h3,
+    .service-card p,
+    .service-card .service-price {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Hacer que la navegación se pueda deslizar horizontalmente en pantallas pequeñas */
+@media (max-width: 768px) {
+  .nav-main ul {
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    gap: 1rem; /* opcional: espacio entre elementos */
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-main ul li {
+    flex: 0 0 auto;
+  }
+}
+
+.logo {
+    margin-right: 2rem; /* Ajusta el valor según lo que necesites */
 }
 
 /* Equipo */
