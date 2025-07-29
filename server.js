@@ -22,8 +22,8 @@ const transporter = nodemailer.createTransport({
 });
 
 // Serve static files from the 'public' directory
-app.use(express.static('public'));
-app.use('/owner', express.static('owner'));
+app.use(express.static(path.join(__dirname, 'public', 'user')));
+app.use('/owner', express.static(path.join(__dirname, 'public', 'owner')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
