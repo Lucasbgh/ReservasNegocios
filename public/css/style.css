@@ -3,6 +3,8 @@
 html {
     box-sizing: border-box;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 *,
@@ -19,6 +21,8 @@ body {
     line-height: 1.6;
     width: 100%;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
@@ -135,7 +139,7 @@ h2 {
 /* Servicios */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado para pantallas más pequeñas */
     gap: 2rem;
 }
 
