@@ -228,6 +228,38 @@ h2 {
     margin-right: 2rem; /* Ajusta el valor según lo que necesites */
 }
 
+
+
+
+.logo {
+    display: inline-block;
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-right: 1rem;
+}
+
+.nav-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.nav-main ul {
+    display: flex;
+    gap: 1rem;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+
+
+
+
+
+
+
+
 /* Equipo */
 .team-grid {
     display: flex;
